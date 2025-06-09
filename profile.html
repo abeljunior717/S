@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Perfil de Usuario</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      width: 100%;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #388e3c;
+    }
+    .logout-btn {
+      background-color: #f44336;
+      color: white
+    }
+    .logout-btn:hover {
+      background-color: #d32f2f;
+    }
+    .home-btn {
+      background-color: #2196f3;
+    }
+    .home-btn:hover {
+      background-color: #1976d2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Mi Perfil</h2>
+    <form id="profile-form">
+      <label for="name">Nombre:</label>
+      <input type="text" id="name" required />
+
+      <label for="email">Correo electrónico:</label>
+      <input type="email" id="email" required />
+
+      <label for="role">Rol:</label>
+      <input type="text" id="role" readonly />
+
+      <label for="current-password">Contraseña actual:</label>
+      <input type="password" id="current-password" placeholder="Requerido para cambiar contraseña" />
+
+      <label for="new-password">Nueva contraseña:</label>
+      <input type="password" id="new-password" placeholder="Opcional" />
+
+      <button type="submit">Guardar Cambios</button>
+    </form>
+
+    <button class="home-btn" id="home-btn">Ir al Inicio</button>
+    <button class="logout-btn" id="logout-btn">Cerrar Sesión</button>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+
+      if (!currentUser) {
+        alert("No has iniciado sesión. Redirigiendo...");
+        window.location.href = "index.html";
+        return;
+      }
+
+      // Mostrar datos actuales
+      document.getElementById("name").value = currentUser.name || "";
+      document.getElementById("email").value = currentUser.email || "";
+      document.getElementById("role").value = currentUser.role || "";
+
+      const form = document.getElementById("profile-form");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const currentPassword = document.getElementById("current-password").value;
+        const newPassword = document.getElementById("new-password").value;
+
+        const userIndex = users.findIndex(u => u.username === currentUser.username);
+        if (userIndex === -1) {
+          alert("Usuario no encontrado.");
+          return;
+        }
+
+        const user = users[userIndex];
+
+        // Validar contraseña actual sólo si se quiere cambiar
+        if (newPassword) {
+          if (currentPassword !== user.password) {
+            alert("La contraseña actual no es correcta.");
+            return;
+          }
+        }
+
+        // Actualizar datos
+        users[userIndex] = {
+          ...user,
+          name,
+          email,
+          password: newPassword ? newPassword : user.password
+        };
+
+        const updatedCurrentUser = {
+          ...currentUser,
+          name,
+          email,
+          password: newPassword ? newPassword : currentUser.password
+        };
+
+        // Guardar
+        localStorage.setItem("users", JSON.stringify(users));
+        localStorage.setItem("currentUser", JSON.stringify(updatedCurrentUser));
+
+        alert("Datos actualizados correctamente.");
+        form.reset();
+        window.location.reload();
+      });
+
+      // Botón "Cerrar sesión"
+      document.getElementById("logout-btn").addEventListener("click", () => {
+        localStorage.removeItem("currentUser");
+        alert("Sesión cerrada.");
+        window.location.href = "index.html";
+      });
+
+      // Botón "Ir al Inicio"
+      document.getElementById("home-btn").addEventListener("click", () => {
+        window.location.href = "index.html"; // cambia a tu archivo principal si es distinto
+      });
+    });
+  </script>
+</body>
+</html>

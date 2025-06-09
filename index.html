@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suárez Joyería - Joyería Fina y Elegante</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap">
+    <style>
+        /* Estilos para notificaciones */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 4px;
+            color: white;
+            transform: translateX(120%);
+            transition: transform 0.5s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background-color: #4CAF50;
+        }
+
+        .notification.error {
+            background-color: #f44336;
+        }
+
+        /* Estilos para el dropdown de autenticación */
+        .auth-dropdown .dropdown-menu {
+            padding: 15px;
+            width: 250px;
+        }
+
+        .btn-auth {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-auth:hover {
+            background-color: #555;
+        }
+
+        #user-info {
+            text-align: center;
+        }
+
+        #user-info p {
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        #logout-btn {
+            background-color: #f44336;
+        }
+
+        #logout-btn:hover {
+            background-color: #d32f2f;
+        }
+        /* Añade esto a tu archivo styles.css */
+.nosotros {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: #f9f9f9;
+}
+
+.nosotros .btn {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #d4af37;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.nosotros .btn:hover {
+    background-color: #b8972e;
+}
+    </style>
+</head>
+<body>
+    <!-- Cabecera -->
+    <header>
+        <div class="logo">
+            <h1>SUAREZ</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li class="dropdown">
+                    <a href="#colecciones">Colecciones</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="joyas.html">Joyas</a></li>
+                        <li><a href="collares.html">Collares</a></li>
+                        <li><a href="relojeria.html">Relojería</a></li>
+                    </ul>
+                </li>
+                <li><a href="#ofertas">Ofertas</a></li>
+                <li><a href="historia.html">Nuestra Historia</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+                <li id="cart-icon">
+                    <a href="cart.html">
+                        🛒 <span class="cart-count">0</span>
+                    </a>
+                </li>
+                <li class="dropdown auth-dropdown">
+                    <a href="#" id="auth-toggle">
+                        <span id="auth-status">Iniciar Sesión</span>
+                    </a>
+                    <div class="dropdown-menu auth-menu">
+                        <form id="login-form" style="display: none;">
+                            <div class="form-group">
+                                <label for="username">Nombre de Usuario:</label>
+                                <input type="text" id="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Contraseña:</label>
+                                <input type="password" id="password" required>
+                            </div>
+                            <button type="submit" class="btn-auth">Ingresar</button>
+                            <div class="auth-links">
+                                <a href="#" id="forgot-password"></a>
+                                <a href="register.html" id="register-link">Crear cuenta</a>
+                            </div>
+                        </form>
+                        <div id="user-info" style="display: none; padding: 15px; text-align: center;">
+                            <p>Bienvenido, <span id="user-name"></span></p>
+                            <a href="historial.html" class="btn-auth" style="display: block; margin-bottom: 10px; text-decoration: none; text-align: center;">
+                            Mi Historial
+                            </a>
+                            <a href="profile.html">Mi Perfil</a>
+                            <button id="logout-btn" class="btn-auth">Cerrar Sesión</button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Sección Hero -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <h1 style="color: black;">Bienvenidos a Suárez Joyería</h1>
+            <p style="color: black;">Descubre la elegancia en cada detalle.</p>
+            <a href="#colecciones" class="btn">Ver Colecciones</a>
+        </div>
+    </section>
+
+    <!-- Sección Colecciones -->
+    <section id="colecciones" class="colecciones">
+        <h2>Nuestras Colecciones</h2>
+        <div class="grid-colecciones">
+            <div class="item">
+                <img src="images/SJ_Imagenes/SJ2_Imagenes/Joyas/so13097_st.jpg" alt="Colección Oro">
+                <div class="product-details">
+                    <h3>Colección Oro</h3>
+                    <p>Anillos, cadenas y pulseras en oro de 18k.</p>
+                    <p class="precio">$1,200</p>
+                    <button class="btn-add-to-cart">Agregar al carrito</button>
+                </div>
+            </div>
+            <div class="item">
+                <img src="images/SJ_Imagenes/SJ2_Imagenes/Colecciones/thesfc_15004.jpg" alt="Colección Plata">
+                <div class="product-details">
+                    <h3>Colección Plata</h3>
+                    <p>Diseños únicos en plata esterlina.</p>
+                    <p class="precio">$800</p>
+                    <button class="btn-add-to-cart">Agregar al carrito</button>
+                </div>
+            </div>
+            <div class="item">
+                <img src="images/SJ_Imagenes/SJ2_Imagenes/Joyas/pe13083-agamv.jpg" alt="Colección Diamantes">
+                <div class="product-details">
+                    <h3>Colección Diamantes</h3>
+                    <p>Piezas exclusivas con diamantes de alta calidad.</p>
+                    <p class="precio">$2,000</p>
+                    <button class="btn-add-to-cart">Agregar al carrito</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Ofertas -->
+    <section id="ofertas" class="ofertas">
+        <h2>Ofertas Especiales</h2>
+        <div class="grid-ofertas">
+            <div class="item">
+                <img src="images/SJ_Imagenes/SJ2_Imagenes/SolitariosYAlianzas/al8018-0at2.jpg" alt="Anillo de Oro">
+                <div class="product-details">
+                    <p>Anillo de oro con descuento del 20%</p>
+                    <span class="precio">$1,200</span>
+                    <button class="btn-add-to-cart">Agregar al carrito</button>
+                </div>
+            </div>
+            <div class="item">
+                <img src="images/SJ_Imagenes/SJ2_Imagenes/Colecciones/co2040-00cr.jpg" alt="Collar de Plata">
+                <div class="product-details">
+                    <p>Collar de perlas con 15% de descuento</p>
+                    <span class="precio">$800</span>
+                    <button class="btn-add-to-cart">Agregar al carrito</button>
+                </div>
+            </div>
+            <div class="item">
+                <img src="images/SJ_Imagenes/SJ2_Imagenes/Relojeria/relojes280x280_0000_ulysse-nardin1.jpg" alt="Reloj de Lujo">
+                <div class="product-details">
+                    <p>Reloj de lujo con 10% de descuento</p>
+                    <span class="precio">$2,500</span>
+                    <button class="btn-add-to-cart">Agregar al carrito</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Nosotros -->
+    <section id="nosotros" class="nosotros">
+        <h2>Sobre Nosotros</h2>
+        <p>En Suárez Joyería, nos dedicamos a crear piezas únicas que reflejen la elegancia y el estilo de nuestros clientes. Con más de 30 años de experiencia, somos líderes en joyería fina en Zacatecas.</p>
+    </section>
+
+    <!-- Sección Contacto -->
+    <section id="contacto" class="contacto">
+        <h2>Contacto</h2>
+        <p>Visítanos o contáctanos para más información:</p>
+        <div class="info-contacto">
+            <p><strong>Dirección:</strong> Av. Principal #123, Zacatecas Norte</p>
+            <p><strong>Teléfono:</strong> <a href="tel:+521234567890">123-456-7890</a></p>
+            <p><strong>Correo:</strong> <a href="mailto:info@suarezjoyeria.com">info@suarezjoyeria.com</a></p>
+        </div>
+    </section>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2023 Suárez Joyería. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/cart.js"></script>
+    <script>
+        // Verificar si hay un usuario logueado al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const authStatus = document.getElementById('auth-status');
+            const loginForm = document.getElementById('login-form');
+            const userInfo = document.getElementById('user-info');
+            const userName = document.getElementById('user-name');
+            const logoutBtn = document.getElementById('logout-btn');
+            
+            // Función para actualizar la UI de autenticación
+            function updateAuthUI() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const historyLink = document.getElementById('history-link');
+    
+    if (currentUser) {
+        authStatus.textContent = currentUser.username || currentUser.name;
+        loginForm.style.display = 'none';
+        userInfo.style.display = 'block';
+        userName.textContent = currentUser.name;
+        
+        
+        // Mostrar enlace a admin si es administrador
+        if (currentUser.role === 'admin') {
+            const adminLink = document.createElement('a');
+            adminLink.href = 'admin.html';
+            adminLink.textContent = 'Panel de Admin';
+            adminLink.style.display = 'block';
+            adminLink.style.marginTop = '10px';
+            adminLink.style.color = '#333';
+            adminLink.style.textDecoration = 'none';
+            adminLink.style.fontWeight = 'bold';
+            
+            const existingLink = userInfo.querySelector('a[href="admin.html"]');
+            if (!existingLink) {
+                userInfo.appendChild(adminLink);
+            }
+            
+            // Ocultar enlace de historial para admin
+            if (historyLink) historyLink.style.display = 'none';
+        } else {
+            // Mostrar enlace de historial para usuarios normales
+            if (historyLink) historyLink.style.display = 'block';
+            
+            // Agregar enlace al historial en el dropdown
+            const historyDropdownLink = document.createElement('a');
+            historyDropdownLink.href = 'historial.html';
+            historyDropdownLink.textContent = 'Mi Historial';
+            historyDropdownLink.className = 'btn-auth';
+            historyDropdownLink.style.display = 'block';
+            historyDropdownLink.style.marginBottom = '10px';
+            historyDropdownLink.style.textDecoration = 'none';
+            historyDropdownLink.style.textAlign = 'center';
+            
+            const existingHistoryLink = userInfo.querySelector('a[href="historial.html"]');
+            if (!existingHistoryLink) {
+                userInfo.insertBefore(historyDropdownLink, logoutBtn);
+            }
+        }
+    } else {
+        authStatus.textContent = 'Iniciar Sesión';
+        loginForm.style.display = 'block';
+        userInfo.style.display = 'none';
+        if (historyLink) historyLink.style.display = 'none';
+    }
+}
+            
+            // Inicializar la UI
+            updateAuthUI();
+            
+            // Manejar el formulario de login
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                // Verificar credenciales de admin
+                const admins = JSON.parse(localStorage.getItem('admins')) || [
+                    { username: 'admin', password: 'admin123', name: 'Administrador Principal', role: 'admin' }
+                ];
+                
+                const admin = admins.find(a => a.username === username && a.password === password);
+                
+                if (admin) {
+                    // Guardar sesión
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        username: admin.username,
+                        name: admin.name,
+                        role: admin.role
+                    }));
+                    
+                    // Mostrar notificación
+                    showNotification('Bienvenido Administrador', 'success');
+                    
+                    // Redirigir después de 1 segundo
+                    setTimeout(() => {
+                        window.location.href = 'admin.html';
+                    }, 1000);
+                    return;
+                }
+                
+                // Verificar credenciales de usuario normal
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const user = users.find(u => u.username === username && u.password === password);
+                
+                if (user) {
+                    // Guardar sesión
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        id: user.id,
+                        username: user.username,
+                        name: user.fullname,
+                        email: user.email,
+                        role: user.role || 'user'
+                    }));
+                    
+                    // Actualizar lastLogin
+                    user.lastLogin = new Date().toISOString();
+                    localStorage.setItem('users', JSON.stringify(users));
+                    
+                    // Mostrar notificación
+                    showNotification(`Bienvenido ${user.fullname}`, 'success');
+                    
+                    // Recargar la página para actualizar la UI
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    showNotification('Credenciales incorrectas', 'error');
+                }
+            });
+            
+            // Manejar logout
+            logoutBtn.addEventListener('click', function() {
+                localStorage.removeItem('currentUser');
+                showNotification('Sesión cerrada correctamente', 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            });
+            
+            // Función para mostrar notificaciones
+            function showNotification(message, type) {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.classList.add('show');
+                    setTimeout(() => {
+                        notification.classList.remove('show');
+                        setTimeout(() => notification.remove(), 500);
+                    }, 3000);
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>

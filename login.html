@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Suárez Joyería</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .auth-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .auth-form h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #555;
+        }
+        
+        .auth-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .auth-links a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .auth-links a:hover {
+            color: #555;
+            text-decoration: underline;
+        }
+        
+        .message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .message.error {
+            background-color: #ffebee;
+            color: #f44336;
+            border: 1px solid #f44336;
+        }
+        
+        .message.success {
+            background-color: #e8f5e9;
+            color: #4CAF50;
+            border: 1px solid #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>SUAREZ</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="register.html">Registrarse</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="auth-container">
+        <div class="auth-form">
+            <h2>Iniciar Sesión</h2>
+            <div id="login-message" class="message"></div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Nombre de Usuario:</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="btn-primary">Ingresar</button>
+            </form>
+            <div class="auth-links">
+                <p>¿No tienes cuenta? <a href="register.html">Regístrate aquí</a></p>
+                <p><a href="#" id="forgot-password">¿Olvidaste tu contraseña?</a></p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Suárez Joyería. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('login-form');
+            const loginMessage = document.getElementById('login-message');
+            
+            // Si ya está logueado, redirigir
+            if (localStorage.getItem('currentUser')) {
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+                window.location.href = user.role === 'admin' ? 'admin.html' : 'index.html';
+            }
+
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                // Resetear mensaje
+                loginMessage.style.display = 'none';
+                
+                // Verificar credenciales de admin
+                const admins = JSON.parse(localStorage.getItem('admins')) || [
+                    { username: 'admin', password: 'admin123', name: 'Administrador Principal', role: 'admin' }
+                ];
+                
+                const admin = admins.find(a => a.username === username && a.password === password);
+                
+                if (admin) {
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        username: admin.username,
+                        name: admin.name,
+                        role: admin.role
+                    }));
+                    
+                    loginMessage.textContent = 'Bienvenido Administrador';
+                    loginMessage.className = 'message success';
+                    loginMessage.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'admin.html';
+                    }, 1500);
+                    return;
+                }
+                
+                // Verificar usuarios normales
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const user = users.find(u => u.username === username && u.password === password);
+                
+                if (user) {
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        id: user.id,
+                        username: user.username,
+                        name: user.fullname,
+                        email: user.email,
+                        role: user.role || 'user'
+                    }));
+                    
+                    // Actualizar lastLogin
+                    user.lastLogin = new Date().toISOString();
+                    localStorage.setItem('users', JSON.stringify(users));
+                    
+                    loginMessage.textContent = `Bienvenido ${user.fullname}`;
+                    loginMessage.className = 'message success';
+                    loginMessage.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                } else {
+                    loginMessage.textContent = 'Usuario o contraseña incorrectos';
+                    loginMessage.className = 'message error';
+                    loginMessage.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Compras - Suárez Joyería</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        /* Estilos para el header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #b8860b;
+            font-weight: 700;
+        }
+        
+        nav ul {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1rem;
+        }
+        
+        nav a:hover {
+            color: #b8860b;
+        }
+        
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-left: 20px;
+        }
+        
+        #auth-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        
+        #cart-icon {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #333;
+            text-decoration: none;
+            position: relative;
+        }
+        
+        .cart-count {
+            background-color: #b8860b;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8em;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        /* Contenedor principal */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        /* Título de la página */
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #b8860b;
+            font-size: 2rem;
+        }
+
+        /* Mensaje cuando no hay historial */
+        .empty-history {
+            text-align: center;
+            padding: 50px 0;
+            color: #666;
+            font-size: 1.2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Estilos para cada compra en el historial */
+        .purchase-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .purchase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .purchase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .purchase-date {
+            font-weight: bold;
+            color: #b8860b;
+            font-size: 1.1rem;
+        }
+
+        .purchase-total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .purchase-items {
+            margin-top: 20px;
+        }
+
+        .purchase-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .item-name-container {
+            display: flex;
+            align-items: center;
+            flex: 2;
+        }
+
+        .item-image {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 15px;
+            border: 1px solid #eee;
+        }
+
+        .item-name {
+            font-weight: 500;
+        }
+
+        .item-qty {
+            flex: 1;
+            text-align: center;
+            color: #666;
+        }
+
+        .item-price {
+            flex: 1;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .purchase-summary {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .summary-label {
+            font-weight: bold;
+            color: #666;
+        }
+
+        .summary-value {
+            font-weight: 500;
+        }
+
+        .total-row {
+            font-size: 1.1rem;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
+        }
+
+        .login-message {
+            text-align: center;
+            padding: 50px 0;
+            font-size: 1.2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .login-link {
+            color: #b8860b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Botón de imprimir historial */
+        .print-history {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #b8860b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .print-history:hover {
+            background-color: #996515;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 12px 3%;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .user-section {
+                margin-left: auto;
+                margin-top: 10px;
+            }
+
+            .purchase-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .purchase-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 15px 0;
+            }
+
+            .item-name-container {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+
+            .item-image {
+                width: 50px;
+                height: 50px;
+                margin-right: 10px;
+            }
+
+            .item-qty, .item-price {
+                text-align: left;
+                width: 100%;
+                padding-left: 85px; /* Alineación con el texto del producto */
+            }
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .container, .container * {
+                visibility: visible;
+            }
+            .container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+            .print-history {
+                display: none;
+            }
+            .purchase-card {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <h1>SUAREZ</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="joyas.html">Joyas</a></li>
+        <li><a href="collares.html">Collares</a></li>
+        <li><a href="relojeria.html">Relojes</a></li>
+        <li class="user-section">
+          <a href="cart.html" id="cart-icon">🛒 <span class="cart-count">0</span></a>
+          <div id="auth-status"><span id="user-name"></span></div>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1 class="page-title">Mi Historial de Compras</h1>
+    <button class="print-history" id="print-history-btn">Imprimir Historial</button>
+    <div id="history-content"></div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Suárez Joyería. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="cart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const cart = new Cart();
+      const authStatus = document.getElementById('auth-status');
+      const userName = document.getElementById('user-name');
+      const historyContent = document.getElementById('history-content');
+      const cartCount = document.querySelector('.cart-count');
+      const printBtn = document.getElementById('print-history-btn');
+
+      // Actualizar contador del carrito
+      cart.updateCartCount();
+
+      // Verifica si hay usuario autenticado
+      checkAuthStatus();
+
+      function checkAuthStatus() {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        const isAdmin = localStorage.getItem('adminLoggedIn') === 'true';
+
+        if (currentUser || isAdmin) {
+          authStatus.innerHTML = `
+            <span>${isAdmin ? 'Admin' : currentUser.fullname || currentUser.username || 'Usuario'}</span>
+            <button id="logout-btn" style="background: none; border: none; cursor: pointer; color: #666;">(Cerrar sesión)</button>
+          `;
+
+          if (!isAdmin) {
+            cart.renderPurchaseHistory('history-content');
+          } else {
+            historyContent.innerHTML = `<div class="login-message">El historial de compras solo está disponible para clientes.</div>`;
+            printBtn.style.display = 'none';
+          }
+
+          document.getElementById('logout-btn').addEventListener('click', function () {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('adminLoggedIn');
+            window.location.href = 'login.html';
+          });
+        } else {
+          authStatus.innerHTML = `<a href="login.html" style="color: #333; text-decoration: none;"><span>Iniciar sesión</span></a>`;
+          historyContent.innerHTML = `
+            <div class="login-message">
+              <p>Debes <a href="login.html" class="login-link">iniciar sesión</a> para ver tu historial de compras.</p>
+            </div>`;
+          printBtn.style.display = 'none';
+        }
+      }
+
+      printBtn.addEventListener('click', () => window.print());
+    });
+  </script>
+</body>
+</html>

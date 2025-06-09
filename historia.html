@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suárez Joyería - Nuestra Historia</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap">
+    <style>
+        /* Estilos específicos para la página de historia */
+        .historia-hero {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../images/historia-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+        }
+        
+        .historia-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .historia-content {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+        
+        .historia-section {
+            margin-bottom: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .historia-section h2 {
+            font-family: 'Playfair Display', serif;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .historia-section h2:after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 2px;
+            background: #d4af37;
+            margin: 15px auto;
+        }
+        
+        .historia-text {
+            max-width: 800px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            text-align: justify;
+        }
+        
+        .historia-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 40px auto;
+        }
+        
+        .timeline:before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background-color: #d4af37;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+        
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+        
+        .timeline-content {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .timeline-year {
+            font-weight: bold;
+            color: #d4af37;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-item:after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #d4af37;
+            border-radius: 50%;
+            top: 20px;
+            z-index: 1;
+        }
+        
+        .timeline-item:nth-child(odd):after {
+            right: -10px;
+        }
+        
+        .timeline-item:nth-child(even):after {
+            left: -10px;
+        }
+        
+        @media (max-width: 768px) {
+            .timeline:before {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+            
+            .timeline-item:after {
+                left: 21px;
+            }
+            
+            .timeline-item:nth-child(odd):after {
+                right: auto;
+            }
+        }
+        
+        .valores-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .valor-card {
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .valor-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .valor-icon {
+            font-size: 2.5rem;
+            color: #d4af37;
+            margin-bottom: 20px;
+        }
+        
+        .valor-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Estilos para notificaciones */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 4px;
+            color: white;
+            transform: translateX(120%);
+            transition: transform 0.5s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background-color: #4CAF50;
+        }
+
+        .notification.error {
+            background-color: #f44336;
+        }
+
+        /* Estilos para el dropdown de autenticación */
+        .auth-dropdown .dropdown-menu {
+            padding: 15px;
+            width: 250px;
+        }
+
+        .btn-auth {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-auth:hover {
+            background-color: #555;
+        }
+
+        #user-info {
+            text-align: center;
+        }
+
+        #user-info p {
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        #logout-btn {
+            background-color: #f44336;
+        }
+
+        #logout-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabecera -->
+    <header>
+        <div class="logo">
+            <h1>SUAREZ</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li class="dropdown">
+                    <a href="joyas.html">Colecciones</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="joyas.html">Joyas</a></li>
+                        <li><a href="collares.html">Collares</a></li>
+                        <li><a href="relojeria.html">Relojería</a></li>
+                    </ul>
+                </li>
+                <li><a href="index.html#ofertas">Ofertas</a></li>
+                <li><a href="historia.html">Nuestra Historia</a></li>
+                <li><a href="index.html#contacto">Contacto</a></li>
+                <li id="cart-icon">
+                    <a href="cart.html">
+                        🛒 <span class="cart-count">0</span>
+                    </a>
+                </li>
+                <li class="dropdown auth-dropdown">
+                    <a href="#" id="auth-toggle">
+                        <span id="auth-status">Iniciar Sesión</span>
+                    </a>
+                    <div class="dropdown-menu auth-menu">
+                        <form id="login-form" style="display: none;">
+                            <div class="form-group">
+                                <label for="username">Nombre de Usuario:</label>
+                                <input type="text" id="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Contraseña:</label>
+                                <input type="password" id="password" required>
+                            </div>
+                            <button type="submit" class="btn-auth">Ingresar</button>
+                            <div class="auth-links">
+                                <a href="#" id="forgot-password"></a>
+                                <a href="register.html" id="register-link">Crear cuenta</a>
+                            </div>
+                        </form>
+                        <div id="user-info" style="display: none; padding: 15px; text-align: center;">
+                            <p>Bienvenido, <span id="user-name"></span></p>
+                            <a href="historial.html" class="btn-auth" style="display: block; margin-bottom: 10px; text-decoration: none; text-align: center;">
+                            Mi Historial
+                            </a>
+                            <button id="logout-btn" class="btn-auth">Cerrar Sesión</button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero de Historia -->
+    <section class="historia-hero">
+        <h1>Nuestra Historia</h1>
+        <p>Más de 30 años creando joyas con pasión y dedicación</p>
+    </section>
+
+    <!-- Contenido de Historia -->
+    <div class="historia-content">
+        <section class="historia-section">
+            <h2>Los Inicios</h2>
+            <p class="historia-text">
+                Suárez Joyería nació en 1990 en el corazón de Zacatecas, fundada por el maestro joyero Don Roberto Suárez. 
+                Con una pequeña tienda familiar y un taller artesanal, Don Roberto comenzó creando piezas únicas que 
+                rápidamente ganaron reconocimiento por su calidad y diseño innovador.
+            </p>
+            <img src="images\SJ_Imagenes\SJ2_Imagenes\historia\1.png" alt="Taller original de Suárez Joyería" class="historia-image">
+            <p class="historia-text">
+                Los primeros años estuvieron marcados por el trabajo meticuloso y la búsqueda de la perfección en cada 
+                detalle. Cada joya era creada a mano, con materiales de la más alta calidad y un profundo respeto por 
+                las tradiciones joyeras que se remontaban a generaciones en la familia Suárez.
+            </p>
+        </section>
+
+        <section class="historia-section">
+            <h2>Nuestra Evolución</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">1990</div>
+                        <p>Apertura de la primera tienda en Zacatecas centro, con solo tres empleados y un pequeño taller artesanal.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">1995</div>
+                        <p>Introducción de la primera colección exclusiva de anillos de compromiso, que se convirtió en nuestro producto estrella.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2002</div>
+                        <p>Expansión a nuestra segunda ubicación en Zacatecas Norte, con un taller más grande y equipo moderno.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2010</div>
+                        <p>Lanzamiento de nuestra línea de joyería contemporánea, fusionando técnicas tradicionales con diseños modernos.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2018</div>
+                        <p>Inauguración de nuestra tienda insignia en Av. Principal, con exposición permanente de nuestras colecciones exclusivas.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2023</div>
+                        <p>Celebración de nuestro 33° aniversario, consolidándonos como líderes en joyería fina en la región.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="historia-section">
+            <h2>Nuestra Filosofía</h2>
+            <p class="historia-text">
+                En Suárez Joyería, creemos que cada pieza cuenta una historia. Nos esforzamos por crear joyas que no solo 
+                sean hermosas, sino que también transmitan emociones y significados profundos. Cada diseño es el resultado 
+                de horas de dedicación, conocimiento técnico y un profundo amor por el arte de la joyería.
+            </p>
+            <img src="images\SJ_Imagenes\SJ2_Imagenes\historia\2.jpg" alt="Maestro joyero trabajando" class="historia-image">
+            <p class="historia-text">
+                Mantenemos un compromiso inquebrantable con la calidad, utilizando solo los mejores materiales y gemas 
+                seleccionadas personalmente por nuestros expertos. Nuestro proceso de fabricación combina técnicas 
+                tradicionales con tecnología de vanguardia, asegurando que cada pieza cumpla con los más altos estándares.
+            </p>
+        </section>
+
+        <section class="historia-section">
+            <h2>Nuestros Valores</h2>
+            <div class="valores-container">
+                <div class="valor-card">
+                    <div class="valor-icon">✧</div>
+                    <h3>Calidad</h3>
+                    <p>Utilizamos solo materiales de la más alta pureza y gemas certificadas en todas nuestras creaciones.</p>
+                </div>
+                <div class="valor-card">
+                    <div class="valor-icon">♡</div>
+                    <h3>Artesanía</h3>
+                    <p>Cada pieza es creada con técnicas tradicionales y atención meticulosa a los detalles.</p>
+                </div>
+                <div class="valor-card">
+                    <div class="valor-icon">✦</div>
+                    <h3>Innovación</h3>
+                    <p>Combinamos diseño clásico con tendencias contemporáneas para crear joyas únicas.</p>
+                </div>
+                <div class="valor-card">
+                    <div class="valor-icon">✫</div>
+                    <h3>Confianza</h3>
+                    <p>Más de tres décadas de experiencia nos avalan como joyeros de confianza.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="historia-section">
+            <h2>El Futuro</h2>
+            <p class="historia-text">
+                Hoy, bajo la dirección de la segunda generación de la familia Suárez, continuamos innovando mientras 
+                mantenemos vivas las tradiciones que nos hicieron grandes. Estamos comprometidos con seguir creciendo, 
+                explorando nuevos diseños y técnicas, y sobre todo, con seguir siendo parte de los momentos más especiales 
+                en la vida de nuestros clientes.
+            </p>
+            <img src="images\SJ_Imagenes\SJ2_Imagenes\historia\3.png" alt="Equipo de Suárez Joyería" class="historia-image">
+            <p class="historia-text">
+                Nuestra visión es expandir el legado de Don Roberto, llevando la excelencia de Suárez Joyería a nuevas 
+                generaciones, siempre con el mismo espíritu artesanal y pasión por la joyería fina que nos caracteriza 
+                desde el primer día.
+            </p>
+        </section>
+    </div>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2023 Suárez Joyería. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/cart.js"></script>
+    <script>
+        // Verificar si hay un usuario logueado al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const authStatus = document.getElementById('auth-status');
+            const loginForm = document.getElementById('login-form');
+            const userInfo = document.getElementById('user-info');
+            const userName = document.getElementById('user-name');
+            const logoutBtn = document.getElementById('logout-btn');
+            
+            // Función para actualizar la UI de autenticación
+            function updateAuthUI() {
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                if (currentUser) {
+                    authStatus.textContent = currentUser.username || currentUser.name;
+                    loginForm.style.display = 'none';
+                    userInfo.style.display = 'block';
+                    userName.textContent = currentUser.name;
+                    
+                    // Mostrar enlace a admin si es administrador
+                    if (currentUser.role === 'admin') {
+                        const adminLink = document.createElement('a');
+                        adminLink.href = 'admin.html';
+                        adminLink.textContent = 'Panel de Admin';
+                        adminLink.style.display = 'block';
+                        adminLink.style.marginTop = '10px';
+                        adminLink.style.color = '#333';
+                        adminLink.style.textDecoration = 'none';
+                        adminLink.style.fontWeight = 'bold';
+                        
+                        const existingLink = userInfo.querySelector('a[href="admin.html"]');
+                        if (!existingLink) {
+                            userInfo.appendChild(adminLink);
+                        }
+                    }
+                } else {
+                    authStatus.textContent = 'Iniciar Sesión';
+                    loginForm.style.display = 'block';
+                    userInfo.style.display = 'none';
+                }
+            }
+            
+            // Inicializar la UI
+            updateAuthUI();
+            
+            // Manejar el formulario de login
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                // Verificar credenciales de admin
+                const admins = JSON.parse(localStorage.getItem('admins')) || [
+                    { username: 'admin', password: 'admin123', name: 'Administrador Principal', role: 'admin' }
+                ];
+                
+                const admin = admins.find(a => a.username === username && a.password === password);
+                
+                if (admin) {
+                    // Guardar sesión
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        username: admin.username,
+                        name: admin.name,
+                        role: admin.role
+                    }));
+                    
+                    // Mostrar notificación
+                    showNotification('Bienvenido Administrador', 'success');
+                    
+                    // Redirigir después de 1 segundo
+                    setTimeout(() => {
+                        window.location.href = 'admin.html';
+                    }, 1000);
+                    return;
+                }
+                
+                // Verificar credenciales de usuario normal
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const user = users.find(u => u.username === username && u.password === password);
+                
+                if (user) {
+                    // Guardar sesión
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        id: user.id,
+                        username: user.username,
+                        name: user.fullname,
+                        email: user.email,
+                        role: user.role || 'user'
+                    }));
+                    
+                    // Actualizar lastLogin
+                    user.lastLogin = new Date().toISOString();
+                    localStorage.setItem('users', JSON.stringify(users));
+                    
+                    // Mostrar notificación
+                    showNotification(`Bienvenido ${user.fullname}`, 'success');
+                    
+                    // Recargar la página para actualizar la UI
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    showNotification('Credenciales incorrectas', 'error');
+                }
+            });
+            
+            // Manejar logout
+            logoutBtn.addEventListener('click', function() {
+                localStorage.removeItem('currentUser');
+                showNotification('Sesión cerrada correctamente', 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            });
+            
+            // Función para mostrar notificaciones
+            function showNotification(message, type) {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.classList.add('show');
+                    setTimeout(() => {
+                        notification.classList.remove('show');
+                        setTimeout(() => notification.remove(), 500);
+                    }, 3000);
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>
